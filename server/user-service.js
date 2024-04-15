@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require("bcryptjs");
 const HTTP_PORT = process.env.PORT || 8080;
-// let mongoDBConnectionString = "mongodb+srv://ccto:xJfAYizS8mwjh7LZ@cluster0.7n6lecv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-let mongoDBConnectionString = process.env.MONGO_DB_URI;
+let mongoDBConnectionString = "mongodb+srv://ccto:xJfAYizS8mwjh7LZ@cluster0.7n6lecv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
 let Schema = mongoose.Schema;
 
 
