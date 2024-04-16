@@ -6,24 +6,18 @@ const jwt = require('jsonwebtoken');
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
 const app = express();
-require('dotenv').config();
 
-// const HTTP_PORT = process.env.PORT || 8080;
 const HTTP_PORT = process.env.PORT || 8080;
-
 
 // JSON Web Token Setup
 let ExtractJwt = passportJWT.ExtractJwt;
 let JwtStrategy = passportJWT.Strategy;
+
+// Configure its options
 let jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
-  secretOrKey: process.env.JWT_SECRET
+  secretOrKey: '&0y7$noP#5rt99&GB%Pz7j2b1vkzaB0RKs%^N^0zOP89NT04mPuaM!&G8cbNZOtH',
 };
-// Configure its options
-// let jwtOptions = {
-//   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
-//   secretOrKey: '&0y7$noP#5rt99&GB%Pz7j2b1vkzaB0RKs%^N^0zOP89NT04mPuaM!&G8cbNZOtH',
-// };
 
 // IMPORTANT - this secret should be a long, unguessable string
 // (ideally stored in a "protected storage" area on the web server).
@@ -33,8 +27,15 @@ let jwtOptions = {
 
 let strategy = new JwtStrategy(jwtOptions, function (jwt_payload, next) {
     console.log('payload received', jwt_payload);
+
     if (jwt_payload) {
-        next(null, { _id: jwt_payload._id, userName: jwt_payload.userName, fullName: jwt_payload.fullName, role: jwt_payload.role });
+        // The following will ensure that all routes using 
+        // passport.authenticate have a req.user._id, req.user.userName, req.user.fullName & req.user.role values 
+        // that matches the request payload data
+        next(null, { _id: jwt_payload._id, 
+            userName: jwt_payload.userName, 
+            fullName: jwt_payload.fullName, 
+            role: jwt_payload.role }); 
     } else {
         next(null, false);
     }
@@ -48,8 +49,6 @@ app.use(passport.initialize());
 
 app.use(cors());
 app.use(express.json());
-
-app.get("/", (req, res) => res.send("Express on Vercel"));
 
 
 app.post("/api/register", (req,res)=>{
